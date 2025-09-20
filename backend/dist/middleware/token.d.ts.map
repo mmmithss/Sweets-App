@@ -1,0 +1,1 @@
+{"version":3,"file":"token.d.ts","sourceRoot":"","sources":["../../src/middleware/token.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,YAAY,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAI/D,eAAO,MAAM,aAAa,GAAI,QAAQ,MAAM,WAG3C,CAAC;AAEF,eAAO,MAAM,YAAY,GACvB,KAAK,OAAO,EACZ,KAAK,QAAQ,EACb,MAAM,YAAY,4DAoBnB,CAAC"}
