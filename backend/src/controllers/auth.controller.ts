@@ -35,6 +35,10 @@ export const signup = async (
 
     //generate token
     const token = generateToken(user._id.toString());
+
+    //clear old cookie
+    res.clearCookie(COOKIE_NAME, { sameSite: "none", secure: true });
+
     //generate cookie
     res.cookie(COOKIE_NAME, token, {
       httpOnly: true,
@@ -105,6 +109,8 @@ export const logout = async (
       sameSite: "none",
       signed: true,
     });
+
+    return res.status(200).json({ message: "Logout successful" });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal server error" });
@@ -115,4 +121,30 @@ export const getAllAccounts = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {};
+) => {
+  try {
+    const users = await User.find({});
+    return res.status(200).json(users);
+  } catch (error) {
+    console.log("Error in getAllAccounts controller", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getMyAccount = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = res.locals.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.status(200).json(user);
+  } catch (error) {
+    console.log("Error in getMyAccount controller", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};

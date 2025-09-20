@@ -1,20 +1,27 @@
 import Router from "express";
-import { getAllAccounts, login, logout, signup } from "../controllers/auth.controller.js";
-import { loginFormValidations, signUpFormValidations, validate } from "../middleware/formValidators.js";
- 
+import {
+  getAllAccounts,
+  getMyAccount,
+  login,
+  logout,
+  signup,
+} from "../controllers/auth.controller.js";
+import {
+  loginFormValidations,
+  signUpFormValidations,
+  validate,
+} from "../middleware/formValidators.js";
+import { protectRoute } from "../middleware/token.js";
+import { get } from "http";
 
 const authRoutes = Router();
 
-//todo priority
-authRoutes.post("/register",signUpFormValidations,validate, signup)
-authRoutes.post("/login",loginFormValidations,validate,login)
-authRoutes.get("/me")
+authRoutes.post("/register", signUpFormValidations, validate, signup);
+authRoutes.post("/login", loginFormValidations, validate, login);
+authRoutes.get("/me", protectRoute, getMyAccount);
 
+authRoutes.post("/logout", logout);
 
-//TODO : Later
-authRoutes.post("/logout",logout)
-
-authRoutes.get("allAccounts",getAllAccounts)
-
+authRoutes.get("allAccounts", getAllAccounts);
 
 export default authRoutes;

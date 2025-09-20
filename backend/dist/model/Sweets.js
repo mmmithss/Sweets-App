@@ -2,15 +2,22 @@ import mongoose from "mongoose";
 const sweetsSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
     },
     price: {
         type: Number,
-        required: true
+        required: true,
     },
     category: {
-        trype: String,
-        required: true
-    }
+        type: String,
+        required: true,
+    },
+    quantity: {
+        type: Number,
+        default: 0,
+    },
 });
+const Sweets = mongoose.model("Sweets", sweetsSchema);
+export default Sweets;
 //# sourceMappingURL=Sweets.js.map
