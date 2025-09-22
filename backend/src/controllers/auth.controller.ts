@@ -33,13 +33,21 @@ export const signup = async (
     await user.save();
     console.log(user);
 
-    //generate token
-    const token = generateToken(user._id.toString());
-
     //clear old cookie
+    console.log("clearing old cookie");
     res.clearCookie(COOKIE_NAME, { sameSite: "none", secure: true });
 
+    //generate token
+    console.log("generating token");
+    const token = generateToken(user._id.toString());
+    console.log("token generated");
+    console.log("-----");
+    console.log(token);
+
+    console.log("-----");
+
     //generate cookie
+    console.log("generating cookie");
     res.cookie(COOKIE_NAME, token, {
       httpOnly: true,
       secure: true,
@@ -47,6 +55,8 @@ export const signup = async (
       maxAge: 7 * 24 * 60 * 60 * 1000,
       signed: true,
     });
+    console.log("cookie generated");
+    console.log("-----");
 
     return res.status(201).json(user);
   } catch (error) {
@@ -137,12 +147,16 @@ export const getMyAccount = async (
   next: NextFunction
 ) => {
   try {
-    const userId = res.locals.userId;
-    const user = await User.findById(userId);
+    const userId = res.locals.userId.toString();
+    const user = await User.findById(userId).select("-password");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    return res.status(200).json(user);
+    const email = user.email;
+    const name = user.name;
+    const isAdmin = user.isAdmin;
+
+    return res.status(200).json({ email, name, isAdmin });
   } catch (error) {
     console.log("Error in getMyAccount controller", error);
     return res.status(500).json({ message: "Internal server error" });

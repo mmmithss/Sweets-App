@@ -1,4 +1,4 @@
-import Router from "express";
+import Router, { type Request, type Response } from "express";
 import {
   getAllAccounts,
   getMyAccount,
@@ -18,6 +18,8 @@ const authRoutes = Router();
 
 authRoutes.post("/register", signUpFormValidations, validate, signup);
 authRoutes.post("/login", loginFormValidations, validate, login);
+
+//Checks if user is logged in or
 authRoutes.get("/me", protectRoute, getMyAccount);
 
 authRoutes.post("/logout", logout);
