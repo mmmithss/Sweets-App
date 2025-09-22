@@ -1,37 +1,53 @@
 import { useState } from "react";
+import SweetCard from "../components/SweetCard";
+import { useGetSweets } from "../hooks/useGetSweets";
+import PageLoading from "./PageLoader";
 
 interface Sweet {
-  id: number;
+  id: string;
   name: string;
   category: string;
   price: number;
   image?: string;
+  quantity: number;
 }
 
-const mockSweets: Sweet[] = [
-  { id: 1, name: "Gulab Jamun", category: "Traditional", price: 120 },
-  { id: 2, name: "Rasgulla", category: "Bengali", price: 150 },
-  { id: 3, name: "Kaju Katli", category: "Dry Fruit", price: 300 },
-];
-
-export default function ItemsPage() {
+interface AuthUser {
+  name: string;
+  email: string;
+  isAdmin: boolean;
+}
+interface ItemsPageProps {
+  user: AuthUser;
+}
+export default function ItemsPage({ user }: ItemsPageProps) {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("sweetName");
 
-  const filteredSweets = mockSweets.filter((sweet) => {
+  const { sweets, isPending } = useGetSweets();
+  console.log(sweets);
+  const filteredSweets = ((sweets as Sweet[]) ?? []).filter((sweet: Sweet) => {
     const query = search.toLowerCase();
-    if (filter === "sweetName") return sweet.name.toLowerCase().includes(query);
-    if (filter === "category")
-      return sweet.category.toLowerCase().includes(query);
-    if (filter === "price") return sweet.price.toString().includes(query);
-    return true;
+
+    if (!query) return true;
+
+    switch (filter) {
+      case "sweetName":
+        return sweet.name.toLowerCase().includes(query);
+      case "category":
+        return sweet.category.toLowerCase().includes(query);
+      case "price":
+        return sweet.price.toString().includes(query);
+      default:
+        return true;
+    }
   });
 
   const handleLogout = () => {
     // TODO: implement logout logic
     console.log("Logout clicked");
   };
-
+  if (isPending) return <PageLoading />;
   return (
     <div className="p-6">
       {/* Header */}
@@ -65,20 +81,16 @@ export default function ItemsPage() {
       {/* Sweet Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {filteredSweets.map((sweet) => (
-          <div key={sweet.id} className="card bg-base-100 shadow-xl">
-            <figure>
-              <img
-                src={sweet.image || "https://via.placeholder.com/150"}
-                alt={sweet.name}
-                className="h-40 w-full object-cover"
-              />
-            </figure>
-            <div className="card-body">
-              <h2 className="card-title">{sweet.name}</h2>
-              <p className="text-sm text-gray-500">{sweet.category}</p>
-              <p className="text-lg font-semibold">₹{sweet.price}</p>
-            </div>
-          </div>
+          <SweetCard
+            key={sweet.id}
+            id={sweet.id}
+            name={sweet.name}
+            category={sweet.category}
+            price={sweet.price}
+            image={sweet.image}
+            quantity={sweet.quantity}
+            isAdmin={user.isAdmin}
+          />
         ))}
       </div>
     </div>

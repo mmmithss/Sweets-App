@@ -59,3 +59,40 @@ export const login = async (data: LoginData) => {
     throw error.response?.data || { message: "Something went wrong" };
   }
 };
+
+interface RestockData {
+  quantity: number;
+  id: string;
+}
+export const restock = async (data: RestockData) => {
+  try {
+    const res = await axiosInstance.put(`/sweets/${data.id}/restock`, {
+      quantity: data.quantity,
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    const error = err as AxiosError<ApiError>;
+    // Important: throw the error so React Query can catch it
+    throw error.response?.data || { message: "Something went wrong" };
+  }
+};
+
+interface Sweet {
+  name: string;
+  category: string;
+  price: number;
+  image?: string;
+  quantity: number;
+}
+
+export const getAllSweets = async () => {
+  try {
+    const req = await axiosInstance.get<Sweet[]>("/sweets");
+    console.log(req);
+    console.log(req.data);
+    return req.data;
+  } catch (error) {
+    console.error(error);
+  }
+};

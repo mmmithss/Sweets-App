@@ -7,6 +7,11 @@ import useAuthUser from "./hooks/useAuth";
 import PageLoading from "./pages/PageLoader";
 
 function App() {
+  interface AuthUser {
+    name: string;
+    email: string;
+    isAdmin: boolean;
+  }
   const { isLoading, authUser } = useAuthUser();
   const isAuthenticated = Boolean(authUser);
   if (isLoading) return <PageLoading />;
@@ -28,7 +33,13 @@ function App() {
         />
         <Route
           path="/sweets"
-          element={isAuthenticated ? <ItemsPage /> : <Navigate to="/login" />}
+          element={
+            isAuthenticated ? (
+              <ItemsPage user={authUser as AuthUser} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
       </Routes>
     </div>

@@ -1,5 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import Sweets from "../model/Sweets.js";
+import { toSweetDto } from "../utils/sweet.mapper.js";
+import type { GetAllSweetsDto } from "../dto/sweets.dto.js";
 
 export const addSweet = async (
   req: Request,
@@ -17,6 +19,12 @@ export const addSweet = async (
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+interface sweetData {
+  name: string;
+  price: number;
+  category: string;
+  quantity: number;
+}
 
 export const getAllSweets = async (
   req: Request,
@@ -25,7 +33,8 @@ export const getAllSweets = async (
 ) => {
   try {
     const sweets = await Sweets.find({});
-    return res.status(200).json(sweets);
+    const data: GetAllSweetsDto = sweets.map(toSweetDto);
+    return res.status(200).json(data);
   } catch (error) {
     console.log("Error in getAllSweets controller", error);
     return res.status(500).json({ message: "Internal server error" });

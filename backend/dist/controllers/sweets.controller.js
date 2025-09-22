@@ -1,4 +1,5 @@
 import Sweets from "../model/Sweets.js";
+import { toSweetDto } from "../utils/sweet.mapper.js";
 export const addSweet = async (req, res, next) => {
     try {
         const { name, price, category } = req.body;
@@ -15,7 +16,8 @@ export const addSweet = async (req, res, next) => {
 export const getAllSweets = async (req, res, next) => {
     try {
         const sweets = await Sweets.find({});
-        return res.status(200).json(sweets);
+        const data = sweets.map(toSweetDto);
+        return res.status(200).json(data);
     }
     catch (error) {
         console.log("Error in getAllSweets controller", error);
