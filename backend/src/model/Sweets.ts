@@ -1,6 +1,15 @@
-import mongoose from "mongoose";
+import { Document, model, Schema, Types } from "mongoose";
 
-const sweetsSchema = new mongoose.Schema({
+export interface SweetDocument extends Document {
+  _id: Types.ObjectId;
+  name: string;
+  price: number;
+  category: string;
+  quantity: number;
+  image: string;
+}
+
+const sweetsSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -18,8 +27,11 @@ const sweetsSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  image: {
+    type: String,
+  },
 });
 
-const Sweets = mongoose.model("Sweets", sweetsSchema);
+const Sweets = model<SweetDocument>("Sweets", sweetsSchema);
 
 export default Sweets;

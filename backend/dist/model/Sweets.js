@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-const sweetsSchema = new mongoose.Schema({
+import { Document, model, Schema, Types } from "mongoose";
+const sweetsSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -17,7 +17,10 @@ const sweetsSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    image: {
+        type: String,
+    },
 });
-const Sweets = mongoose.model("Sweets", sweetsSchema);
+const Sweets = model("Sweets", sweetsSchema);
 export default Sweets;
 //# sourceMappingURL=Sweets.js.map

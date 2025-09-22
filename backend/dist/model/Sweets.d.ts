@@ -1,42 +1,16 @@
-import mongoose from "mongoose";
-declare const Sweets: mongoose.Model<{
+import { Document, Types } from "mongoose";
+export interface SweetDocument extends Document {
+    _id: Types.ObjectId;
     name: string;
     price: number;
     category: string;
     quantity: number;
-}, {}, {}, {}, mongoose.Document<unknown, {}, {
-    name: string;
-    price: number;
-    category: string;
-    quantity: number;
-}, {}, mongoose.DefaultSchemaOptions> & {
-    name: string;
-    price: number;
-    category: string;
-    quantity: number;
-} & {
-    _id: mongoose.Types.ObjectId;
-} & {
-    __v: number;
-}, mongoose.Schema<any, mongoose.Model<any, any, any, any, any, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, {
-    name: string;
-    price: number;
-    category: string;
-    quantity: number;
-}, mongoose.Document<unknown, {}, mongoose.FlatRecord<{
-    name: string;
-    price: number;
-    category: string;
-    quantity: number;
-}>, {}, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & mongoose.FlatRecord<{
-    name: string;
-    price: number;
-    category: string;
-    quantity: number;
+    image: string;
+}
+declare const Sweets: import("mongoose").Model<SweetDocument, {}, {}, {}, Document<unknown, {}, SweetDocument, {}, {}> & SweetDocument & Required<{
+    _id: Types.ObjectId;
 }> & {
-    _id: mongoose.Types.ObjectId;
-} & {
     __v: number;
-}>>;
+}, any>;
 export default Sweets;
 //# sourceMappingURL=Sweets.d.ts.map
